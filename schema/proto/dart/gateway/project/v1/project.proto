@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package dart.gateway.project.v1;
+
+import "google/api/resource.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/10Narratives/dart/pkg/dart/gateway/project/v1;project";
+
+message Project {
+  option (google.api.resource) = {
+    type : "dart.gateway/Project"
+    pattern : "projects/{project}"
+    singular : "project"
+    plural : "projects"
+  };
+
+  string name = 1 [
+    (google.api.field_behavior) = IDENTIFIER,
+    (google.api.resource_reference).type = "dart.gateway/Project"
+  ];
+
+  string display_name = 2;
+  string description = 3;
+  google.protobuf.Timestamp create_time = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  google.protobuf.Timestamp update_time = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
