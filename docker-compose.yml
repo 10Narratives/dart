@@ -1,0 +1,18 @@
+services:
+  dart-gateway:
+    build:
+      context: .
+      dockerfile: dart-gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dart-gateway/configs/dart-gateway.example.yaml:/root/config.yaml:ro
+    restart: unless-stopped
+
+  dart-scheduler:
+    build:
+      context: .
+      dockerfile: dart-scheduler/Dockerfile
+    volumes:
+      - ./dart-scheduler/configs/dart-scheduler.example.yaml:/root/config.yaml:ro
+    restart: unless-stopped

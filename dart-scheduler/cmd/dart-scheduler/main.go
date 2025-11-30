@@ -9,8 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/10Narratives/dart/common/config"
 	schedulerapp "github.com/10Narratives/dart/dart-scheduler/internal/app/dart-scheduler"
+	"github.com/10Narratives/dart/pkg/config"
 	"go.uber.org/zap"
 )
 
