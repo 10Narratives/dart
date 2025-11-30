@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package dart.gateway.resource.v1;
+
+import "google/api/resource.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/10Narratives/dart/pkg/dart/gateway/resource/v1;resource";
+
+// Resource represents a computation node in the system with specific
+// capabilities.
+message Resource {
+  option (google.api.resource) = {
+    type : "dart.gateway/Resource"
+    pattern : "projects/{project}/resources/{resource}"
+    singular : "resource"
+    plural : "resources"
+  };
+
+  // The resource name.
+  // Format: `projects/{project}/resources/{resource}`
+  string name = 1 [
+    (google.api.field_behavior) = IDENTIFIER,
+    (google.api.resource_reference).type = "dart.gateway/Resource"
+  ];
+
+  // Capabilities of this resource, populated by the system.
+  ResourceCapabilities capabilities = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Output only. Creation timestamp.
+  google.protobuf.Timestamp create_time = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Network address for accessing the resource (e.g.,
+  // "worker-123.example.com:8080").
+  string address = 4 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ResourceCapabilities {
+  // Number of CPU cores available.
+  int32 cpu_cores = 1;
+
+  // Amount of memory in bytes.
+  int64 memory_bytes = 2;
+
+  // Number of GPU devices available.
+  int32 gpu_count = 3;
+
+  // Type of GPU available (e.g., "NVIDIA_A100", "AMD_MI210").
+  string gpu_type = 4;
+
+  // Storage capacity in bytes.
+  int64 storage_bytes = 5;
+
+  // Network bandwidth in bits per second.
+  int64 network_bandwidth_bps = 6;
+
+  // List of agent types this resource can execute.
+  repeated string supported_agents = 7;
+
+  // Maximum number of concurrent tasks this resource can handle.
+  int32 max_concurrent_tasks = 8;
+
+  // Minimum task duration in seconds this resource is optimized for.
+  float min_task_duration_s = 9;
+}
