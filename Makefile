@@ -1,16 +1,11 @@
 generate:
-	protoc \
-	  --proto_path=schema/proto \
-	  --proto_path=schema/proto/third_party \
-	  --go_out=paths=source_relative:pkg \
-	  --go-grpc_out=paths=source_relative:pkg \
-	  --grpc-gateway_out=paths=source_relative:pkg \
-	  --grpc-gateway_opt=logtostderr=true \
-	  --grpc-gateway_opt=generate_unbound_methods=true \
-	  --validate_out=lang=go,paths=source_relative:pkg \
-	  --openapiv2_out=docs/ \
-	  --openapiv2_opt=logtostderr=true \
-	  schema/proto/dart/gateway/project/v1/project.proto \
-	  schema/proto/dart/gateway/project/v1/project_service.proto
+	PYTHONPATH=. python3 tools/generate_code_artifacts.py
+	PYTHONPATH=. python3 tools/generate_docs_artifacts.py
 
-.PHONY: generate
+docs: generate
+	PYTHONPATH=. python3 tools/serve_docs.py
+
+clean:
+	PYTHONPATH=. python3 tools/clean_generated_artifacts.py
+
+.PHONY: generate docs clean
