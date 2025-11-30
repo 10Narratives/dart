@@ -1,0 +1,2 @@
+environment: prod
+shutdown_timeout: 10s
