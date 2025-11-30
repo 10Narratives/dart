@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package dart.gateway.project.v1;
+
+import "google/api/annotations.proto";
+import "google/api/resource.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+import "dart/gateway/project/v1/project.proto";
+
+option go_package = "github.com/10Narratives/dart/pkg/dart/gateway/project/v1;project";
+
+service ProjectService {
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
+    option (google.api.http) = {
+      get : "/v1alpha1/projects"
+    };
+  }
+
+  rpc GetProject(GetProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      get : "/v1alpha1/{name=projects/*}"
+    };
+  }
+
+  rpc CreateProject(CreateProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      post : "/v1alpha1/projects"
+      body : "project"
+    };
+  }
+
+  rpc UpdateProject(UpdateProjectRequest) returns (Project) {
+    option (google.api.http) = {
+      patch : "/v1alpha1/{project.name=projects/*}"
+      body : "project"
+    };
+  }
+
+  rpc DeleteProject(DeleteProjectRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/v1alpha1/{name=projects/*}"
+    };
+  }
+}
+
+message ListProjectsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListProjectsResponse {
+  repeated Project projects = 1;
+  string next_page_token = 2;
+}
+
+message GetProjectRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "dart.gateway/Project"
+  ];
+}
+
+message CreateProjectRequest {
+  string project_id = 1 [ (google.api.field_behavior) = OPTIONAL ];
+  Project project = 2 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message UpdateProjectRequest {
+  Project project = 1 [ (google.api.field_behavior) = REQUIRED ];
+
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteProjectRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "dart.gateway/Project"
+  ];
+}
