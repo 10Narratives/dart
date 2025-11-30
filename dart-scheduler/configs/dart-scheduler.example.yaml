@@ -1,0 +1,2 @@
+environment: dev
+shutdown_timeout: 10s
