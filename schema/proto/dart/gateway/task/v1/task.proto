@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package dart.gateway.task.v1;
+
+import "google/api/resource.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/10Narratives/dart/pkg/dart/gateway/task/v1;task";
+
+message Task {
+  option (google.api.resource) = {
+    type : "dart.gateway/Task"
+    pattern : "projects/{project}/agents/{agent}/tasks/{task}"
+    singular : "task"
+    plural : "tasks"
+  };
+
+  // The resource name of the task.
+  // Format: `projects/{project}/agents/{agent}/tasks/{task}`
+  string name = 1 [
+    (google.api.field_behavior) = IDENTIFIER,
+    (google.api.resource_reference).type = "dart.gateway/Task"
+  ];
+
+  // The resource name of the assigned resource.
+  // Format: `projects/{project}/resources/{resource}`
+  string assigned_resource = 2 [
+    (google.api.field_behavior) = OPTIONAL,
+    (google.api.resource_reference).type = "dart.gateway/Resource"
+  ];
+
+  // Time-to-live for the task. If the task is not started before this duration
+  // elapses, it will be automatically expired and marked as failed.
+  google.protobuf.Duration ttl = 3 [ (google.api.field_behavior) = OPTIONAL ];
+
+  // Output only. Creation timestamp.
+  google.protobuf.Timestamp create_time = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Output only. Start timestamp when the task begins execution.
+  google.protobuf.Timestamp start_time = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Output only. Completion timestamp when the task finishes execution.
+  google.protobuf.Timestamp end_time = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Current state of the task.
+  enum State {
+    STATE_UNSPECIFIED = 0;
+    STATE_PENDING = 1;   // Task is queued but not yet started
+    STATE_RUNNING = 2;   // Task is currently executing
+    STATE_FAILED = 3;    // Task execution failed
+    STATE_EXPIRED = 4;   // Task exceeded its TTL before execution
+    STATE_COMPLETED = 5; // Task completed successfully
+    STATE_CANCELED = 6;  // Task was explicitly canceled
+  }
+  State state = 7 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Task-specific parameters (JSON-encoded).
+  string parameters = 8 [ (google.api.field_behavior) = REQUIRED ];
+}

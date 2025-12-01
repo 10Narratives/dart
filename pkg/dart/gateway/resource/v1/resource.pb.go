@@ -7,6 +7,7 @@
 package resource
 
 import (
+	v1 "github.com/10Narratives/dart/pkg/dart/domain/capabilities/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -30,13 +31,19 @@ type Resource struct {
 	// The resource name.
 	// Format: `projects/{project}/resources/{resource}`
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Capabilities of this resource, populated by the system.
-	Capabilities *ResourceCapabilities `protobuf:"bytes,2,opt,name=capabilities,proto3" json:"capabilities,omitempty"`
+	// Compute capabilities of the resource (CPU, GPU).
+	ComputeCapabilities *v1.ComputeCapabilities `protobuf:"bytes,2,opt,name=compute_capabilities,json=computeCapabilities,proto3" json:"compute_capabilities,omitempty"`
+	// Memory capabilities of the resource.
+	MemoryCapabilities *v1.MemoryCapabilities `protobuf:"bytes,3,opt,name=memory_capabilities,json=memoryCapabilities,proto3" json:"memory_capabilities,omitempty"`
+	// Network capabilities of the resource.
+	NetworkCapabilities *v1.NetworkCapabilities `protobuf:"bytes,4,opt,name=network_capabilities,json=networkCapabilities,proto3" json:"network_capabilities,omitempty"`
+	// Task execution capabilities of the resource.
+	TaskExecutionCapabilities *v1.TaskExecutionCapabilities `protobuf:"bytes,5,opt,name=task_execution_capabilities,json=taskExecutionCapabilities,proto3" json:"task_execution_capabilities,omitempty"`
 	// Output only. Creation timestamp.
-	CreateTime *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
+	CreateTime *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
 	// Network address for accessing the resource (e.g.,
 	// "worker-123.example.com:8080").
-	Address       string `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	Address       string `protobuf:"bytes,7,opt,name=address,proto3" json:"address,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -78,9 +85,30 @@ func (x *Resource) GetName() string {
 	return ""
 }
 
-func (x *Resource) GetCapabilities() *ResourceCapabilities {
+func (x *Resource) GetComputeCapabilities() *v1.ComputeCapabilities {
 	if x != nil {
-		return x.Capabilities
+		return x.ComputeCapabilities
+	}
+	return nil
+}
+
+func (x *Resource) GetMemoryCapabilities() *v1.MemoryCapabilities {
+	if x != nil {
+		return x.MemoryCapabilities
+	}
+	return nil
+}
+
+func (x *Resource) GetNetworkCapabilities() *v1.NetworkCapabilities {
+	if x != nil {
+		return x.NetworkCapabilities
+	}
+	return nil
+}
+
+func (x *Resource) GetTaskExecutionCapabilities() *v1.TaskExecutionCapabilities {
+	if x != nil {
+		return x.TaskExecutionCapabilities
 	}
 	return nil
 }
@@ -99,146 +127,22 @@ func (x *Resource) GetAddress() string {
 	return ""
 }
 
-type ResourceCapabilities struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Number of CPU cores available.
-	CpuCores int32 `protobuf:"varint,1,opt,name=cpu_cores,json=cpuCores,proto3" json:"cpu_cores,omitempty"`
-	// Amount of memory in bytes.
-	MemoryBytes int64 `protobuf:"varint,2,opt,name=memory_bytes,json=memoryBytes,proto3" json:"memory_bytes,omitempty"`
-	// Number of GPU devices available.
-	GpuCount int32 `protobuf:"varint,3,opt,name=gpu_count,json=gpuCount,proto3" json:"gpu_count,omitempty"`
-	// Type of GPU available (e.g., "NVIDIA_A100", "AMD_MI210").
-	GpuType string `protobuf:"bytes,4,opt,name=gpu_type,json=gpuType,proto3" json:"gpu_type,omitempty"`
-	// Storage capacity in bytes.
-	StorageBytes int64 `protobuf:"varint,5,opt,name=storage_bytes,json=storageBytes,proto3" json:"storage_bytes,omitempty"`
-	// Network bandwidth in bits per second.
-	NetworkBandwidthBps int64 `protobuf:"varint,6,opt,name=network_bandwidth_bps,json=networkBandwidthBps,proto3" json:"network_bandwidth_bps,omitempty"`
-	// List of agent types this resource can execute.
-	SupportedAgents []string `protobuf:"bytes,7,rep,name=supported_agents,json=supportedAgents,proto3" json:"supported_agents,omitempty"`
-	// Maximum number of concurrent tasks this resource can handle.
-	MaxConcurrentTasks int32 `protobuf:"varint,8,opt,name=max_concurrent_tasks,json=maxConcurrentTasks,proto3" json:"max_concurrent_tasks,omitempty"`
-	// Minimum task duration in seconds this resource is optimized for.
-	MinTaskDurationS float32 `protobuf:"fixed32,9,opt,name=min_task_duration_s,json=minTaskDurationS,proto3" json:"min_task_duration_s,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
-}
-
-func (x *ResourceCapabilities) Reset() {
-	*x = ResourceCapabilities{}
-	mi := &file_dart_gateway_resource_v1_resource_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResourceCapabilities) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResourceCapabilities) ProtoMessage() {}
-
-func (x *ResourceCapabilities) ProtoReflect() protoreflect.Message {
-	mi := &file_dart_gateway_resource_v1_resource_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResourceCapabilities.ProtoReflect.Descriptor instead.
-func (*ResourceCapabilities) Descriptor() ([]byte, []int) {
-	return file_dart_gateway_resource_v1_resource_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *ResourceCapabilities) GetCpuCores() int32 {
-	if x != nil {
-		return x.CpuCores
-	}
-	return 0
-}
-
-func (x *ResourceCapabilities) GetMemoryBytes() int64 {
-	if x != nil {
-		return x.MemoryBytes
-	}
-	return 0
-}
-
-func (x *ResourceCapabilities) GetGpuCount() int32 {
-	if x != nil {
-		return x.GpuCount
-	}
-	return 0
-}
-
-func (x *ResourceCapabilities) GetGpuType() string {
-	if x != nil {
-		return x.GpuType
-	}
-	return ""
-}
-
-func (x *ResourceCapabilities) GetStorageBytes() int64 {
-	if x != nil {
-		return x.StorageBytes
-	}
-	return 0
-}
-
-func (x *ResourceCapabilities) GetNetworkBandwidthBps() int64 {
-	if x != nil {
-		return x.NetworkBandwidthBps
-	}
-	return 0
-}
-
-func (x *ResourceCapabilities) GetSupportedAgents() []string {
-	if x != nil {
-		return x.SupportedAgents
-	}
-	return nil
-}
-
-func (x *ResourceCapabilities) GetMaxConcurrentTasks() int32 {
-	if x != nil {
-		return x.MaxConcurrentTasks
-	}
-	return 0
-}
-
-func (x *ResourceCapabilities) GetMinTaskDurationS() float32 {
-	if x != nil {
-		return x.MinTaskDurationS
-	}
-	return 0
-}
-
 var File_dart_gateway_resource_v1_resource_proto protoreflect.FileDescriptor
 
 const file_dart_gateway_resource_v1_resource_proto_rawDesc = "" +
 	"\n" +
-	"'dart/gateway/resource/v1/resource.proto\x12\x18dart.gateway.resource.v1\x1a\x19google/api/resource.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto\"\xd1\x02\n" +
+	"'dart/gateway/resource/v1/resource.proto\x12\x18dart.gateway.resource.v1\x1a\x19google/api/resource.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/api/annotations.proto\x1a6dart/domain/capabilities/v1/compute_capabilities.proto\x1a5dart/domain/capabilities/v1/memory_capabilities.proto\x1a6dart/domain/capabilities/v1/network_capabilities.proto\x1a=dart/domain/capabilities/v1/task_execution_capabilities.proto\"\x9c\x05\n" +
 	"\bResource\x121\n" +
 	"\x04name\x18\x01 \x01(\tB\x1d\xe0A\b\xfaA\x17\n" +
-	"\x15dart.gateway/ResourceR\x04name\x12W\n" +
-	"\fcapabilities\x18\x02 \x01(\v2..dart.gateway.resource.v1.ResourceCapabilitiesB\x03\xe0A\x03R\fcapabilities\x12@\n" +
-	"\vcreate_time\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampB\x03\xe0A\x03R\n" +
+	"\x15dart.gateway/ResourceR\x04name\x12c\n" +
+	"\x14compute_capabilities\x18\x02 \x01(\v20.dart.domain.capabilities.v1.ComputeCapabilitiesR\x13computeCapabilities\x12`\n" +
+	"\x13memory_capabilities\x18\x03 \x01(\v2/.dart.domain.capabilities.v1.MemoryCapabilitiesR\x12memoryCapabilities\x12c\n" +
+	"\x14network_capabilities\x18\x04 \x01(\v20.dart.domain.capabilities.v1.NetworkCapabilitiesR\x13networkCapabilities\x12v\n" +
+	"\x1btask_execution_capabilities\x18\x05 \x01(\v26.dart.domain.capabilities.v1.TaskExecutionCapabilitiesR\x19taskExecutionCapabilities\x12@\n" +
+	"\vcreate_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampB\x03\xe0A\x03R\n" +
 	"createTime\x12\x1d\n" +
-	"\aaddress\x18\x04 \x01(\tB\x03\xe0A\x02R\aaddress:X\xeaAU\n" +
-	"\x15dart.gateway/Resource\x12'projects/{project}/resources/{resource}*\tresources2\bresource\"\xf3\x02\n" +
-	"\x14ResourceCapabilities\x12\x1b\n" +
-	"\tcpu_cores\x18\x01 \x01(\x05R\bcpuCores\x12!\n" +
-	"\fmemory_bytes\x18\x02 \x01(\x03R\vmemoryBytes\x12\x1b\n" +
-	"\tgpu_count\x18\x03 \x01(\x05R\bgpuCount\x12\x19\n" +
-	"\bgpu_type\x18\x04 \x01(\tR\agpuType\x12#\n" +
-	"\rstorage_bytes\x18\x05 \x01(\x03R\fstorageBytes\x122\n" +
-	"\x15network_bandwidth_bps\x18\x06 \x01(\x03R\x13networkBandwidthBps\x12)\n" +
-	"\x10supported_agents\x18\a \x03(\tR\x0fsupportedAgents\x120\n" +
-	"\x14max_concurrent_tasks\x18\b \x01(\x05R\x12maxConcurrentTasks\x12-\n" +
-	"\x13min_task_duration_s\x18\t \x01(\x02R\x10minTaskDurationSBDZBgithub.com/10Narratives/dart/pkg/dart/gateway/resource/v1;resourceb\x06proto3"
+	"\aaddress\x18\a \x01(\tB\x03\xe0A\x02R\aaddress:X\xeaAU\n" +
+	"\x15dart.gateway/Resource\x12'projects/{project}/resources/{resource}*\tresources2\bresourceBDZBgithub.com/10Narratives/dart/pkg/dart/gateway/resource/v1;resourceb\x06proto3"
 
 var (
 	file_dart_gateway_resource_v1_resource_proto_rawDescOnce sync.Once
@@ -252,20 +156,26 @@ func file_dart_gateway_resource_v1_resource_proto_rawDescGZIP() []byte {
 	return file_dart_gateway_resource_v1_resource_proto_rawDescData
 }
 
-var file_dart_gateway_resource_v1_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_dart_gateway_resource_v1_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_dart_gateway_resource_v1_resource_proto_goTypes = []any{
-	(*Resource)(nil),              // 0: dart.gateway.resource.v1.Resource
-	(*ResourceCapabilities)(nil),  // 1: dart.gateway.resource.v1.ResourceCapabilities
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(*Resource)(nil),                     // 0: dart.gateway.resource.v1.Resource
+	(*v1.ComputeCapabilities)(nil),       // 1: dart.domain.capabilities.v1.ComputeCapabilities
+	(*v1.MemoryCapabilities)(nil),        // 2: dart.domain.capabilities.v1.MemoryCapabilities
+	(*v1.NetworkCapabilities)(nil),       // 3: dart.domain.capabilities.v1.NetworkCapabilities
+	(*v1.TaskExecutionCapabilities)(nil), // 4: dart.domain.capabilities.v1.TaskExecutionCapabilities
+	(*timestamppb.Timestamp)(nil),        // 5: google.protobuf.Timestamp
 }
 var file_dart_gateway_resource_v1_resource_proto_depIdxs = []int32{
-	1, // 0: dart.gateway.resource.v1.Resource.capabilities:type_name -> dart.gateway.resource.v1.ResourceCapabilities
-	2, // 1: dart.gateway.resource.v1.Resource.create_time:type_name -> google.protobuf.Timestamp
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 0: dart.gateway.resource.v1.Resource.compute_capabilities:type_name -> dart.domain.capabilities.v1.ComputeCapabilities
+	2, // 1: dart.gateway.resource.v1.Resource.memory_capabilities:type_name -> dart.domain.capabilities.v1.MemoryCapabilities
+	3, // 2: dart.gateway.resource.v1.Resource.network_capabilities:type_name -> dart.domain.capabilities.v1.NetworkCapabilities
+	4, // 3: dart.gateway.resource.v1.Resource.task_execution_capabilities:type_name -> dart.domain.capabilities.v1.TaskExecutionCapabilities
+	5, // 4: dart.gateway.resource.v1.Resource.create_time:type_name -> google.protobuf.Timestamp
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_dart_gateway_resource_v1_resource_proto_init() }
@@ -279,7 +189,7 @@ func file_dart_gateway_resource_v1_resource_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_dart_gateway_resource_v1_resource_proto_rawDesc), len(file_dart_gateway_resource_v1_resource_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

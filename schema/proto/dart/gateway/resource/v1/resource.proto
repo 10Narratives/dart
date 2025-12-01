@@ -7,6 +7,11 @@ import "google/api/field_behavior.proto";
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
+import "dart/domain/capabilities/v1/compute_capabilities.proto";
+import "dart/domain/capabilities/v1/memory_capabilities.proto";
+import "dart/domain/capabilities/v1/network_capabilities.proto";
+import "dart/domain/capabilities/v1/task_execution_capabilities.proto";
+
 option go_package = "github.com/10Narratives/dart/pkg/dart/gateway/resource/v1;resource";
 
 // Resource represents a computation node in the system with specific
@@ -26,44 +31,24 @@ message Resource {
     (google.api.resource_reference).type = "dart.gateway/Resource"
   ];
 
-  // Capabilities of this resource, populated by the system.
-  ResourceCapabilities capabilities = 2
-      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Compute capabilities of the resource (CPU, GPU).
+  dart.domain.capabilities.v1.ComputeCapabilities compute_capabilities = 2;
+
+  // Memory capabilities of the resource.
+  dart.domain.capabilities.v1.MemoryCapabilities memory_capabilities = 3;
+
+  // Network capabilities of the resource.
+  dart.domain.capabilities.v1.NetworkCapabilities network_capabilities = 4;
+
+  // Task execution capabilities of the resource.
+  dart.domain.capabilities.v1.TaskExecutionCapabilities
+      task_execution_capabilities = 5;
 
   // Output only. Creation timestamp.
-  google.protobuf.Timestamp create_time = 3
+  google.protobuf.Timestamp create_time = 6
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
 
   // Network address for accessing the resource (e.g.,
   // "worker-123.example.com:8080").
-  string address = 4 [ (google.api.field_behavior) = REQUIRED ];
-}
-
-message ResourceCapabilities {
-  // Number of CPU cores available.
-  int32 cpu_cores = 1;
-
-  // Amount of memory in bytes.
-  int64 memory_bytes = 2;
-
-  // Number of GPU devices available.
-  int32 gpu_count = 3;
-
-  // Type of GPU available (e.g., "NVIDIA_A100", "AMD_MI210").
-  string gpu_type = 4;
-
-  // Storage capacity in bytes.
-  int64 storage_bytes = 5;
-
-  // Network bandwidth in bits per second.
-  int64 network_bandwidth_bps = 6;
-
-  // List of agent types this resource can execute.
-  repeated string supported_agents = 7;
-
-  // Maximum number of concurrent tasks this resource can handle.
-  int32 max_concurrent_tasks = 8;
-
-  // Minimum task duration in seconds this resource is optimized for.
-  float min_task_duration_s = 9;
+  string address = 7 [ (google.api.field_behavior) = REQUIRED ];
 }
