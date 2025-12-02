@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package dart.gateway.resource.v1;
+
+import "google/api/resource.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+import "dart/domain/capabilities/v1/compute_capabilities.proto";
+import "dart/domain/capabilities/v1/memory_capabilities.proto";
+import "dart/domain/capabilities/v1/network_capabilities.proto";
+import "dart/domain/capabilities/v1/task_execution_capabilities.proto";
+
+option go_package = "github.com/10Narratives/dart/pkg/dart/gateway/resource/v1;resource";
+
+// Resource represents a computation node in the system with specific
+// capabilities.
+message Resource {
+  option (google.api.resource) = {
+    type : "dart.gateway/Resource"
+    pattern : "projects/{project}/resources/{resource}"
+    singular : "resource"
+    plural : "resources"
+  };
+
+  // The resource name.
+  // Format: `projects/{project}/resources/{resource}`
+  string name = 1 [
+    (google.api.field_behavior) = IDENTIFIER,
+    (google.api.resource_reference).type = "dart.gateway/Resource"
+  ];
+
+  // Compute capabilities of the resource (CPU, GPU).
+  dart.domain.capabilities.v1.ComputeCapabilities compute_capabilities = 2;
+
+  // Memory capabilities of the resource.
+  dart.domain.capabilities.v1.MemoryCapabilities memory_capabilities = 3;
+
+  // Network capabilities of the resource.
+  dart.domain.capabilities.v1.NetworkCapabilities network_capabilities = 4;
+
+  // Task execution capabilities of the resource.
+  dart.domain.capabilities.v1.TaskExecutionCapabilities
+      task_execution_capabilities = 5;
+
+  // Output only. Creation timestamp.
+  google.protobuf.Timestamp create_time = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Network address for accessing the resource (e.g.,
+  // "worker-123.example.com:8080").
+  string address = 7 [ (google.api.field_behavior) = REQUIRED ];
+}
