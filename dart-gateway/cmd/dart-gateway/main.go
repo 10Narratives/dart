@@ -20,6 +20,7 @@ func main() {
 		fmt.Printf("cannot read configuration: %v\n", err)
 		os.Exit(1)
 	}
+	fmt.Println(cfg)
 
 	log, err := newLogger(cfg.Environment)
 	if err != nil {
