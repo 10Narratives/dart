@@ -5,8 +5,11 @@ import (
 
 	pgcl "github.com/10Narratives/dart/pkg/components/databases/postgres"
 	grpcsrv "github.com/10Narratives/dart/pkg/components/transport/grpc/server"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/validator"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/grpc"
 )
 
 type App struct {
@@ -19,9 +22,18 @@ type App struct {
 
 func NewApp(cfg *Config, log *zap.Logger) (*App, error) {
 	return &App{
-		cfg:        cfg,
-		log:        log,
-		grpcServer: grpcsrv.NewComponent(cfg.Transport.GRPCServer.Address),
+		cfg: cfg,
+		log: log,
+		grpcServer: grpcsrv.NewComponent(
+			cfg.Transport.GRPCServer.Address,
+			grpcsrv.WithServerOptions(
+				grpc.ChainUnaryInterceptor(
+					validator.UnaryServerInterceptor(),
+					// logging.UnaryServerInterceptor(),
+					recovery.UnaryServerInterceptor(),
+				),
+			),
+		),
 		// stateDB:    pgcl.NewComponent(cfg.Databases.StateDB.DSN),
 	}, nil
 }

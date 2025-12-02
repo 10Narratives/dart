@@ -16,13 +16,13 @@ func defaultComponentOptions() *componentOptions {
 	}
 }
 
-func WithServiceRegistrations(regs []ServiceRegistration) ComponentOption {
+func WithServiceRegistrations(regs ...ServiceRegistration) ComponentOption {
 	return func(co *componentOptions) {
 		co.regs = append(co.regs, regs...)
 	}
 }
 
-func WithServerOptions(serverOptions []grpc.ServerOption) ComponentOption {
+func WithServerOptions(serverOptions ...grpc.ServerOption) ComponentOption {
 	return func(co *componentOptions) {
 		co.serverOptions = append(co.serverOptions, serverOptions...)
 	}
