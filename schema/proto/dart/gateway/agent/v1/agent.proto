@@ -59,10 +59,6 @@ message Agent {
   map<string, string> parameters_descriptions = 8
       [ (google.api.field_behavior) = OPTIONAL ];
 
-  // Example parameters structure in Struct format for documentation purposes.
-  google.protobuf.Struct example_parameters = 9
-      [ (google.api.field_behavior) = OPTIONAL ];
-
   // Output only. Creation timestamp.
   google.protobuf.Timestamp create_time = 6
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
