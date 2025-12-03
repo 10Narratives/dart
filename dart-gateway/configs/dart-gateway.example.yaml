@@ -1,2 +1,10 @@
 environment: dev
 shutdown_timeout: 10s
+
+transport:
+  grpc:
+    address: 0.0.0.0:55055
+
+databases:
+  statedb:
+    dsb: ""
