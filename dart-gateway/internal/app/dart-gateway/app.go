@@ -23,7 +23,7 @@ type App struct {
 }
 
 func NewApp(cfg *Config, log *zap.Logger) (*App, error) {
-	// stateDB := pgcl.NewComponent(cfg.Databases.StateDB.DSN)
+	stateDB := pgcl.NewComponent(cfg.Databases.StateDB.DSN)
 
 	// projectRepo := &projectrepo.Repository{}
 
@@ -34,19 +34,19 @@ func NewApp(cfg *Config, log *zap.Logger) (*App, error) {
 		log: log,
 		// projectRepo:    projectRepo,
 		// projectService: projectService,
-		// stateDB:        stateDB,
-		// grpcServer: grpcsrv.NewComponent(
-		// 	cfg.Transport.GRPCServer.Address,
-		// 	grpcsrv.WithServerOptions(
-		// 		grpc.ChainUnaryInterceptor(
-		// 			validator.UnaryServerInterceptor(),
-		// 			recovery.UnaryServerInterceptor(),
-		// 		),
-		// 	),
-		// 	grpcsrv.WithServiceRegistrations(
-		// 		projectapi.Registration(projectService),
-		// 	),
-		// ),
+		stateDB: stateDB,
+		grpcServer: grpcsrv.NewComponent(
+			cfg.Transport.GRPCServer.Address,
+			// grpcsrv.WithServerOptions(
+			// 	grpc.ChainUnaryInterceptor(
+			// 		validator.UnaryServerInterceptor(),
+			// 		recovery.UnaryServerInterceptor(),
+			// 	),
+			// ),
+			// grpcsrv.WithServiceRegistrations(
+			// 	projectapi.Registration(projectService),
+			// ),
+		),
 	}, nil
 }
 

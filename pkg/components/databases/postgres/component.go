@@ -18,7 +18,9 @@ func NewComponent(dsn string, opts ...ComponentOption) *Component {
 		opt(co)
 	}
 
-	return &Component{}
+	return &Component{
+		dsn: dsn,
+	}
 }
 
 func (c *Component) Startup(ctx context.Context) error {
