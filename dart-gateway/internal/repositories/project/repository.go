@@ -10,19 +10,26 @@ import (
 	"github.com/10Narratives/dart/pkg/garp/methods/get"
 	"github.com/10Narratives/dart/pkg/garp/methods/list"
 	"github.com/10Narratives/dart/pkg/garp/methods/update"
+	"github.com/jackc/pgx/v5"
 )
 
 type Repository struct {
+	db *pgx.Conn
 }
 
 var _ projectsrv.ProjectRepository = &Repository{}
 
-func NewRepository() *Repository {
-	return &Repository{}
+func NewRepository(conn *pgx.Conn) *Repository {
+	return &Repository{
+		db: conn,
+	}
 }
 
 // CreateResource implements [projectsrv.ProjectRepository].
 func (r *Repository) CreateResource(ctx context.Context, opts *create.CreateResourceOptions) (*projectdomain.Project, error) {
+	const query = `select * from code.create_project();`
+	r.db.Query(ctx, query)
+
 	panic("unimplemented")
 }
 

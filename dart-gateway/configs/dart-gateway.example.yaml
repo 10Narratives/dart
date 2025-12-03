@@ -7,4 +7,4 @@ transport:
 
 databases:
   statedb:
-    dsb: ""
+    dsn: "postgres://dart_user:dart_password@postgres:5432/dart?sslmode=disable"
