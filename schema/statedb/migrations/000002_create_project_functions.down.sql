@@ -1,7 +1,0 @@
-DROP FUNCTION IF EXISTS code.create_project(TEXT, TEXT, TEXT);
-DROP FUNCTION IF EXISTS code.update_project(TEXT, TEXT, TEXT);
-DROP FUNCTION IF EXISTS code.get_project(TEXT);
-DROP FUNCTION IF EXISTS code.list_projects(INTEGER, TEXT);
-DROP FUNCTION IF EXISTS code.delete_project(TEXT);
-
-DROP SCHEMA IF EXISTS code;

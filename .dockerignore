@@ -1,7 +1,0 @@
-**/*
-!go.mod
-!go.sum
-!pkg/**
-!dart-gateway/**
-!dart-scheduler/**
-!schema/**
